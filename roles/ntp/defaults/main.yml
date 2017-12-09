@@ -1,0 +1,4 @@
+---
+timezone: Europe/Prague
+ntp_servers:
+  - 0.debian.pool.ntp.org

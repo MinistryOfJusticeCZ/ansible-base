@@ -1,0 +1,5 @@
+- name: Setup justice linux
+  hosts: all
+  roles:
+    - ldap_pam
+  environment: "{{proxy_env}}"

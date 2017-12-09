@@ -1,0 +1,100 @@
+---
+
+- name: Make sure required packages are in place
+  package:
+    name: '{{ item }}'
+    state: 'present'
+  with_flattened:
+    - '{{ apt_packages }}'
+
+- name: Install pip package
+  pip:
+    name: psycopg2
+    state: 'present'
+
+- name: Make sure required users for postgres db are in place
+  postgresql_user:
+    name: '{{ item.name }}'
+    password: '{{ item.password }}'
+    role_attr_flags: CREATEDB,NOSUPERUSER
+  with_flattened:
+    - '{{ postgres_users }}'
+
+- name: Create deployers group
+  group:
+    name: deployers
+    state: present
+
+- name: Make sure there is a gitlab_deploy user
+  user:
+    name: gitlab_deploy
+    comment: "Gitlab deploy user"
+    groups: sudo,deployers
+    shell: /bin/bash
+    state: present
+
+- name: Copy public key for deploy user
+  copy:
+    content: '{{gitlab_pub_key}}'
+    dest: ~gitlab_deploy/.ssh/authorized_keys
+
+- name: Ensure rails applications main folder
+  file:
+    path: /srv
+    state: directory
+    owner: root
+    group: root
+
+- name: Ensure rails application folder
+  file:
+    path: /srv/{{rails_app_name}}/shared/config
+    state: directory
+    owner: gitlab_deploy
+    group: gitlab_deploy
+
+- name: Create default database config for rails app
+  template:
+    src: templates/pg_database.yml.j2
+    dest: /srv/{{rails_app_name}}/shared/config/database.yml
+    owner: gitlab_deploy
+    group: gitlab_deploy
+
+- name: Create default unicorn config
+  template:
+    src: templates/unicorn.rb.j2
+    dest: /srv/{{rails_app_name}}/shared/config/unicorn.rb
+    owner: gitlab_deploy
+    group: gitlab_deploy
+
+- name: Create secrets file
+  template:
+    src: templates/secrets.yml.j2
+    dest: /srv/{{rails_app_name}}/shared/config/secrets.yml
+    owner: gitlab_deploy
+    group: gitlab_deploy
+
+- name: Create egov_utils config file
+  template:
+    src: templates/config.yml.j2
+    dest: /srv/{{rails_app_name}}/shared/config/config.yml
+    owner: gitlab_deploy
+    group: gitlab_deploy
+
+- name: Create nginx config file
+  template:
+    src: templates/nginx_site.j2
+    dest: /etc/nginx/sites-available/{{rails_app_name}}
+
+- name: Disable default nginx site
+  file:
+    path: /etc/nginx/sites-enabled/default
+    state: absent
+
+- name: Enable nginx site
+  file:
+    path: /etc/nginx/sites-enabled/{{rails_app_name}}
+    src: /etc/nginx/sites-available/{{rails_app_name}}
+    state: link
+
+- name: Restart nginx
+  service: name=nginx state=restarted

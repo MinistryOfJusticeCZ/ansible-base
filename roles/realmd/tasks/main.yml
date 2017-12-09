@@ -1,0 +1,30 @@
+---
+
+- name: Make sure required packages are in place
+  package:
+    name: '{{ item }}'
+    state: latest
+  with_items:
+    - realmd
+    - sssd
+    - sssd-tools
+
+- name: Add domin to realm config file
+  lineinfile:
+    path: /etc/realmd.conf
+    insertafter: EOF
+    line: '[{{ domain }}]'
+
+- name: Set the OU where to put the computer
+  lineinfile:
+    path: /etc/realmd.conf
+    state: present
+    insertafter: line: '[{{ domain }}]'
+    regexp: '^%ADMIN ALL='
+    line: 'computer-ou = {{ server_ou }}'
+    # validate: '/usr/sbin/visudo -cf %s'
+  when: server_ou is defined
+
+- name: Joins the computer to domain
+  command: realm join {{ domain | quote }} --user {{ join_user.name }}
+  stdin: '{{ join_user.password }}'

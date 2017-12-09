@@ -1,0 +1,7 @@
+- name: Enable backports repo
+  lineinfile:
+    path: /etc/apt/sources.list
+    line: 'deb http://deb.debian.org/debian stretch-backports main'
+
+- name: install cockpit
+  apt: pkg={{ cockpit }} state=present
