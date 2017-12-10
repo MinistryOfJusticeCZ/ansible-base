@@ -5,6 +5,7 @@
   when: (ansible_os_family == "Debian" and ansible_distribution_major_version == "9")
 
 - name: install cockpit
-  package:
+  apt:
     name: cockpit
-    state: latest
+    state: present
+    update_cache: yes
