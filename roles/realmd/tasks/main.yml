@@ -31,4 +31,5 @@
 
 - name: Joins the computer to domain
   command: realm join {{ domain | quote }} --user {{ realmd.join_user.name }}
-  stdin: '{{ realmd.join_user.password }}'
+  args:
+    stdin: '{{ realmd.join_user.password }}'
