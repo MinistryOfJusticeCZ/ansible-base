@@ -5,9 +5,13 @@
     name: '{{ item }}'
     state: latest
   with_items:
+    - policykit-1
     - realmd
     - sssd
     - sssd-tools
+    - libnss-sss
+    - libpam-sss
+    - adcli
 
 - name: Add domin to realm config file
   lineinfile:
