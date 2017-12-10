@@ -1,4 +1,5 @@
 domain: '{{ ansible_nodename.split('.')[1:] | join('.') }}'
-join_user:
-  name: Admin
-  password: Ahoj
+realmd:
+  join_user:
+    name: Admin
+    password: SomePass

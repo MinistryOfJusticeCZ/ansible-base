@@ -19,12 +19,12 @@
   lineinfile:
     path: /etc/realmd.conf
     state: present
-    insertafter: line: '[{{ domain }}]'
+    insertafter: '[{{ domain }}]'
     regexp: '^%ADMIN ALL='
-    line: 'computer-ou = {{ server_ou }}'
+    line: 'computer-ou = {{ realmd.server_ou }}'
     # validate: '/usr/sbin/visudo -cf %s'
-  when: server_ou is defined
+  when: realmd.server_ou is defined
 
 - name: Joins the computer to domain
-  command: realm join {{ domain | quote }} --user {{ join_user.name }}
-  stdin: '{{ join_user.password }}'
+  command: realm join {{ domain | quote }} --user {{ realmd.join_user.name }}
+  stdin: '{{ realmd.join_user.password }}'
