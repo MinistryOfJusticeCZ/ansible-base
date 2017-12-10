@@ -1,5 +1,5 @@
 domain: 'servis.justice.cz'
 realmd:
   join_user:
-    name: Admin
+    name: Administrator
     password: SomePass
