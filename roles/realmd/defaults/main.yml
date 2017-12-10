@@ -1,4 +1,4 @@
-domain: '{{ ansible_nodename.split('.')[1:] | join('.') }}'
+domain: 'servis.justice.cz'
 realmd:
   join_user:
     name: Admin
