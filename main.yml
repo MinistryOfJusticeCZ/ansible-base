@@ -8,4 +8,3 @@
     - ntp
     - realmd
     - cockpit
-  when: ansible_os_family == "Debian"
