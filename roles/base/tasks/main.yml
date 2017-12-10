@@ -8,14 +8,14 @@
   lineinfile:
     dest: /etc/apt/apt.conf.d/70debconf
     state: absent
-    regexp: "^\s*Acquire::http::Proxy"
+    regexp: '^\s*Acquire::http::Proxy'
     # regexp: "^\s*Acquire::http::Proxy\s+(?!({{ http_proxy }}))"
   when: http_proxy is defined
 
 - name: Set apt http proxy
   lineinfile:
     dest: /etc/apt/apt.conf.d/70debconf
-    line: Acquire::http::Proxy "{{ http_proxy }}";
+    line: 'Acquire::http::Proxy "{{ http_proxy }}"';
     create: yes
     user: root
     group: root
@@ -25,7 +25,7 @@
 - name: Set apt https proxy
   lineinfile:
     dest: /etc/apt/apt.conf.d/70debconf
-    line: Acquire::https::Proxy "{{ http_proxy }}";
+    line: 'Acquire::https::Proxy "{{ http_proxy }}";'
   when: http_proxy is defined
 
 
