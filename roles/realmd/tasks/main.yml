@@ -37,8 +37,14 @@
 #     # validate: '/usr/sbin/visudo -cf %s'
 #   when: realmd.server_ou is defined
 
+- name: Find user - to find out if server is already registered
+  command: id '{{ realmd.join_user.name | quote }}@{{ domain | quote }}'
+  register: domain_connected
+  ignore_errors: True
+
 - name: Joins the computer to domain
   expect:
-    command: "realm join {{ domain | quote }} --user '{{ realmd.join_user.name }}' --computer-ou '{{ realmd.server_ou }}'"
+    command: "realm join {{ domain | quote }} --user '{{ realmd.join_user.name | quote }}' --computer-ou '{{ realmd.server_ou | quote }}'"
     responses:
       (?i)password: '{{ realmd.join_user.password }}'
+  when: domain_connected|failed

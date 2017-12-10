@@ -2,6 +2,9 @@
   lineinfile:
     path: /etc/apt/sources.list
     line: 'deb http://deb.debian.org/debian stretch-backports main'
+  when: (ansible_os_family == "Debian" and ansible_distribution_major_version == "9")
 
 - name: install cockpit
-  apt: pkg={{ cockpit }} state=present
+  package:
+    name: cockpit
+    state: latest
