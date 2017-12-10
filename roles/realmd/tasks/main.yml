@@ -13,6 +13,11 @@
     - libpam-sss
     - adcli
 
+- name: Install pexpect
+  package:
+    name: python-pexpect
+    state: latest
+
 # - name: Add domin to realm config file
 #   lineinfile:
 #     path: /etc/realmd.conf
