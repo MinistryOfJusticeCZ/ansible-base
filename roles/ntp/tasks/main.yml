@@ -17,7 +17,7 @@
   service: name=ntp state=started enabled=true
 
 - name: set ntp server
-  lineinfile: dest=/etc/ntp.conf state=present regexp='^pool ' line='server {{ item }} iburst'
+  lineinfile: dest=/etc/ntp.conf state=present regexp='^pool ' line='pool {{ item }} iburst'
   notify: restart ntp
   with_items: "{{ ntp_servers }}"
 
