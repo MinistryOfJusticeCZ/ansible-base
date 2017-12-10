@@ -17,12 +17,12 @@
   service: name=ntp state=started enabled=true
 
 - name: set ntp server
-  lineinfile: dest=/etc/ntp.conf state=present regexp='^server ' line='server {{ item }} iburst'
+  lineinfile: dest=/etc/ntp.conf state=present regexp='^pool ' line='server {{ item }} iburst'
   notify: restart ntp
   with_items: "{{ ntp_servers }}"
 
 # Note that there may be more than one 'server' line in this file (hence we
 # cannot do this with just one regexp rule).
 - name: remove all other ntp servers
-  lineinfile: dest=/etc/ntp.conf state=absent regexp="^server\s+(?!({{ ntp_servers | join('|') }}))"
+  lineinfile: dest=/etc/ntp.conf state=absent regexp="^pool\s+(?!({{ ntp_servers | join('|') }}))"
   notify: restart ntp
