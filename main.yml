@@ -1,5 +1,10 @@
-- name: Setup justice linux
+---
+- name: Provision debian machine for justice DVZ
   hosts: all
+  gather_facts: yes
   roles:
-    - ldap_pam
-  environment: "{{proxy_env}}"
+    - base
+    - ufw
+    - ntp
+    - realmd
+    # - cockpit
