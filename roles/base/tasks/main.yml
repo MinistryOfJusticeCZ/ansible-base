@@ -8,8 +8,10 @@
   lineinfile:
     dest: /etc/apt/apt.conf.d/70debconf
     state: absent
-    regexp: "^\s*Acquire::http::Proxy\s+(?!{{ http_proxy }})"
+    regexp: "^\s*Acquire::http::Proxy"
+    # regexp: "^\s*Acquire::http::Proxy\s+(?!({{ http_proxy }}))"
   when: http_proxy is defined
+
 - name: Set apt http proxy
   lineinfile:
     dest: /etc/apt/apt.conf.d/70debconf
