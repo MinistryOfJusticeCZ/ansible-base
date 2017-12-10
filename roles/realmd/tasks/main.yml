@@ -28,7 +28,6 @@
     path: /etc/realmd.conf
     state: present
     insertafter: '[{{ domain }}]'
-    regexp: '^%ADMIN ALL='
     line: 'computer-ou = {{ realmd.server_ou }}'
     # validate: '/usr/sbin/visudo -cf %s'
   when: realmd.server_ou is defined
