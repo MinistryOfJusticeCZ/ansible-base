@@ -9,6 +9,12 @@
     - vim
     - unattended-upgrades
 
+- name: Install management and observation agents
+  apt: pkg={{ item }} state=present
+  with_items:
+    - open-vm-tools
+    - zabbix-agent
+
 - name: set the server message of the day explaining ansible was the configuration management tool
   copy: src=motd
         dest=/etc/motd
