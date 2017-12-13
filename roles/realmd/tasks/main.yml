@@ -48,3 +48,11 @@
     responses:
       (?i)password: '{{ realmd.join_user.password }}'
   when: domain_connected|failed
+
+- name: Allow sudo for sudo group
+  lineinfile:
+    dest: /etc/sudoers
+    state: present
+    line: '%{{ realmd.sudo_group }}@{{ domain }}  ALL=(root:ALL) ALL, !/bin/su'
+    validate: visudo -cf %s
+  when: realmd.sudo_group is defined
