@@ -18,5 +18,5 @@
     name: python-pexpect
     state: latest
 
-- include_tasks: sidekiq.yml
+- include_tasks: realmd.yml
   when: realmd.disabled is not defined
