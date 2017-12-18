@@ -25,7 +25,7 @@
 
 - name: Joins the computer to domain
   expect:
-    command: "realm join {{ domain | quote }} --user '{{ realmd.join_user.name | quote }}' --computer-ou '{{ realmd.server_ou | quote }}' --os-name '{{ansible_distribution}}' --os-version '{{ansible_distribution_version}}'"
+    command: "realm join {{ domain | quote }} --user '{{ realmd.join_user.name | quote }}' --computer-ou '{{ realmd.server_ou | quote }}' --os-name '{{ansible_distribution}}' --os-version '{{ansible_distribution_version}}' '{{domain|quote}}'"
     responses:
       (?i)password: '{{ realmd.join_user.password }}'
   when: domain_connected|failed
