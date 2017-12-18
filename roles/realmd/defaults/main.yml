@@ -1,5 +1,7 @@
 domain: 'servis.justice.cz'
 realmd:
+  disabled: True
   join_user:
     name: Administrator
     password: SomePass
+  # sudo_group: SomePrivilegedGroup

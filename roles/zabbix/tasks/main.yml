@@ -1,0 +1,4 @@
+- name: Install management and observation agents
+  apt: pkg={{ item }} state=present
+  with_items:
+    - zabbix-agent

@@ -18,41 +18,5 @@
     name: python-pexpect
     state: latest
 
-# - name: Add domin to realm config file
-#   lineinfile:
-#     path: /etc/realmd.conf
-#     insertafter: EOF
-#     line: '[{{ domain }}]'
-#     create: yes
-#     owner: root
-#     group: root
-#     mode: 0644
-
-# - name: Set the OU where to put the computer
-#   lineinfile:
-#     path: /etc/realmd.conf
-#     state: present
-#     insertafter: '[{{ domain }}]'
-#     line: 'computer-ou = {{ realmd.server_ou }}'
-#     # validate: '/usr/sbin/visudo -cf %s'
-#   when: realmd.server_ou is defined
-
-- name: Find user - to find out if server is already registered
-  command: id '{{ realmd.join_user.name | quote }}@{{ domain | quote }}'
-  register: domain_connected
-  ignore_errors: True
-
-- name: Joins the computer to domain
-  expect:
-    command: "realm join {{ domain | quote }} --user '{{ realmd.join_user.name | quote }}' --computer-ou '{{ realmd.server_ou | quote }}'"
-    responses:
-      (?i)password: '{{ realmd.join_user.password }}'
-  when: domain_connected|failed
-
-- name: Allow sudo for sudo group
-  lineinfile:
-    dest: /etc/sudoers
-    state: present
-    line: '%{{ realmd.sudo_group }}@{{ domain }}  ALL=(root:ALL) ALL, !/bin/su'
-    validate: visudo -cf %s
-  when: realmd.sudo_group is defined
+- include_tasks: sidekiq.yml
+  when: realmd.disabled is not defined
