@@ -37,3 +37,18 @@
     line: '%{{ realmd.sudo_group | quote }}@{{ domain | quote }}  ALL=(root:ALL) ALL, !/bin/su'
     validate: visudo -cf %s
   when: realmd.sudo_group is defined
+
+- name: Add pam_mkhomedir for Debian machines
+  copy:
+    src: pam_mkhomedir
+    dest: /usr/share/pam-configs/mkhomedir
+  when: ansible_os_family == "Debian"
+  notify:
+    - run pam-auth-update
+
+- name: 'Defaults homedir to domain/user'
+  lineinfile:
+    dest: /etc/sssd/sssd.conf
+    state: present
+    regexp: '^fallback_homedir'
+    line: 'fallback_homedir = /home/%d/%u'

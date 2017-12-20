@@ -1,0 +1,2 @@
+- name: run pam-auth-update
+  shell: pam-auth-update --package
