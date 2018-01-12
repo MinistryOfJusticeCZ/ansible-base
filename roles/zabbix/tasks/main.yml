@@ -1,4 +1,55 @@
-- name: Install management and observation agents
-  apt: pkg={{ item }} state=present
+---
+# Instalace a konfigurace zabbix-agent
+# Instalace aktuální verze zabbix agenta z oficiálních repozitářu třetí strany,
+# doplnění konfiguračního souboru na cílový zabbix server a definice hostname
+# sledovaNého serveru (fqdn dle řídícho domenóvého serveru)
+
+- include_tasks: realmd.yml
+  when: ansible_os_family == "RedHat" and ansible_lsb.major_release >= 7
+
+- include_tasks: debian.yml
+  when: ansible_os_family == "Debian" and ansible_lsb.major_release == 9
+
+- name: Enable zabbix-agent service
+  service:
+    name: zabbix-agent
+    enabled: yes
+
+#### modifikace zabbix_agent.conf
+- name: Konfigurace zabbix agenta
+  block:
+    - lineinfile:
+        path: /etc/zabbix/zabbix_agentd.conf
+        regexp: '^Server=(?!{{ zabbix__server }})'
+        line: Server={{ zabbix__server }}
+        # validate: ##### Passive checks related
+      notify: restart zabbix-agent
+    - lineinfile:
+        path: /etc/zabbix/zabbix_agentd.conf
+        regexp: '^ServerActive=(?!{{ zabbix__server }})'
+        line: 'ServerActive={{ zabbix__server }}'
+        # validate: ##### Active checks related
+      notify: restart zabbix-agent
+    - lineinfile:
+        path: /etc/zabbix/zabbix_agentd.conf
+        regexp: '^Hostname=(?!{{ zabbix__hostname_fqdn }})'
+        line: Hostname={{ zabbix__hostname_fqdn }}
+        # validate: ##### Active checks related
+      notify: restart zabbix-agent
+
+- name: open port 10050-10051/tcp on firewalld
+  firewalld:
+    port: 10050-10051/tcp
+    state: enabled
+    permanent: true
+  notify: restart firewalld
+  when: ansible_os_family == "RedHat" and ansible_lsb.major_release >= 7
+
+- name: open port 10050-10051 on 10050-10051
+  ufw: rule=allow port={{ item }}
   with_items:
-    - zabbix-agent
+    - 10050
+    - 10051
+  # but installation of ufw is not solved now
+  # and ansible_os_family == "RedHat" and ansible_lsb.major_release == 6
+  when: ansible_os_family == "Debian"
