@@ -1,2 +1,2 @@
 - include_tasks: zabbix.yml
-  when: zabbix__server is defined
+  when: zabbix__server is defined and zabbix__server
