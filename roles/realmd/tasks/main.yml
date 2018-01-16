@@ -4,6 +4,7 @@
     name: '{{ item }}'
     state: latest
   with_items:
+    - pexpect
     - packagekit
     - policykit-1
     - realmd
