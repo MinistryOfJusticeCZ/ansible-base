@@ -29,7 +29,7 @@
 
 
 - name: Install some commonly used packages
-  apt: pkg={{ item }} state=present
+  package: name={{ item }} state=present
   with_items:
     - fail2ban
     - git
@@ -39,7 +39,7 @@
     - unattended-upgrades
 
 - name: Install management and observation agents
-  apt: pkg={{ item }} state=present
+  package: name={{ item }} state=present
   with_items:
     - open-vm-tools
 
@@ -57,9 +57,10 @@
 #  lineinfile: dest=/etc/ssh/sshd_config state=present regexp='^PasswordAuthentication ' line='PasswordAuthentication no'
 #  notify: restart sshd
 
-- name: enable unattended security updates option
-  debconf: name=unattended-upgrades
-           question='unattended-upgrades/enable_auto_updates'
-           value='true'
-           vtype='boolean'
-  notify: reconfigure unattended-upgrades
+#  Hosts will be updated through standalone task, not by themselves
+#- name: enable unattended security updates option
+#  debconf: name=unattended-upgrades
+#           question='unattended-upgrades/enable_auto_updates'
+#           value='true'
+#          vtype='boolean'
+#  notify: reconfigure unattended-upgrades
