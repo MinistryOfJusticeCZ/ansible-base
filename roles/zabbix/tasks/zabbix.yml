@@ -20,19 +20,19 @@
   block:
     - lineinfile:
         path: /etc/zabbix/zabbix_agentd.conf
-        regexp: '^Server=(?!{{ zabbix__server }})'
+        regexp: '^Server='
         line: Server={{ zabbix__server }}
         # validate: ##### Passive checks related
       notify: restart zabbix-agent
     - lineinfile:
         path: /etc/zabbix/zabbix_agentd.conf
-        regexp: '^ServerActive=(?!{{ zabbix__server }})'
+        regexp: '^ServerActive='
         line: 'ServerActive={{ zabbix__server }}'
         # validate: ##### Active checks related
       notify: restart zabbix-agent
     - lineinfile:
         path: /etc/zabbix/zabbix_agentd.conf
-        regexp: '^Hostname=(?!{{ zabbix__hostname_fqdn }})'
+        regexp: '^Hostname='
         line: Hostname={{ zabbix__hostname_fqdn }}
         # validate: ##### Active checks related
       notify: restart zabbix-agent
