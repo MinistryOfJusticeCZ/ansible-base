@@ -1,11 +1,10 @@
-
 # - name: Install management and observation agents
 #   apt: pkg={{ item }} state=present
 #   with_items:
 #     - zabbix-agent
 
 # import deb repo
-- name: instalace repozitáře [Zabbix:3.4,Debian 9]
+- name: instalace repozitáře [Zabbix:3.4,Debian 8/9]
   apt:
     deb: http://repo.zabbix.com/zabbix/3.4/debian/pool/main/z/zabbix-release/zabbix-release_3.4-1+stretch_all.deb
 
