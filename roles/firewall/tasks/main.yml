@@ -1,0 +1,14 @@
+---
+- include_tasks: clear_ufw.yml
+  when: ansible_os_family == "Debian" and ansible_lsb.major_release >= 8
+
+- name: Install firewalld
+  package:
+    name: firewalld
+    state: present
+
+- name: Enable firewalld
+  service: name=firewalld state=started enabled=yes
+
+- name: reload and enable firewall
+  ufw: state=enabled policy=deny

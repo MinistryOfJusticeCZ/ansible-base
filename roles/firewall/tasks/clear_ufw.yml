@@ -1,0 +1,17 @@
+---
+- name: check if ufw is installed
+  package:
+    name: ufw
+    state: present
+  check_mode: true
+  register: ufw_present
+
+- name: disable and reset firewall
+  ufw: state=reset
+  when: not ufw_present.changed
+
+- name: remove ufw
+  package:
+    name: ufw
+    state: absent
+  when: not ufw_present.changed
