@@ -5,10 +5,7 @@
 - name: Install firewalld
   package:
     name: firewalld
-    state: present
+    state: latest
 
 - name: Enable firewalld
   service: name=firewalld state=started enabled=yes
-
-- name: reload and enable firewall
-  ufw: state=enabled policy=deny
