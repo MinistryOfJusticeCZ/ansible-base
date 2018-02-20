@@ -43,13 +43,3 @@
     state: enabled
     permanent: true
   notify: restart firewalld
-  when: ansible_os_family == "RedHat" and ansible_lsb.major_release >= 7
-
-- name: open port 10050-10051 on 10050-10051
-  ufw: rule=allow port={{ item }}
-  with_items:
-    - 10050
-    - 10051
-  # but installation of ufw is not solved now
-  # and ansible_os_family == "RedHat" and ansible_lsb.major_release == 6
-  when: ansible_os_family == "Debian"
