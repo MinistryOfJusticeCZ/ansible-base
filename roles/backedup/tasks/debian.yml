@@ -6,5 +6,5 @@
 
 - name: Install debt packages from justice cloud
   apt:
-    deb: "{{ item }}"
+    deb: "{{ item.url }}"
   with_items: "{{ backup__package_list }}"
