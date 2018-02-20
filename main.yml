@@ -2,6 +2,7 @@
 - name: Provision debian machine for justice DVZ
   hosts: all
   gather_facts: yes
+  environment: "{{proxy_env}}"
   roles:
     - base
     - firewall

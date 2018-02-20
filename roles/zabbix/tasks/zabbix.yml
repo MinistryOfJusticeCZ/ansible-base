@@ -4,7 +4,7 @@
 # doplnění konfiguračního souboru na cílový zabbix server a definice hostname
 # sledovaNého serveru (fqdn dle řídícho domenóvého serveru)
 
-- include_tasks: realmd.yml
+- include_tasks: redhat.yml
   when: ansible_os_family == "RedHat" and ansible_lsb.major_release >= 7
 
 - include_tasks: debian.yml
