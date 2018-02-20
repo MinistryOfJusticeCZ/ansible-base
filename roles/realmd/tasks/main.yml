@@ -13,6 +13,12 @@
     - libpam-sss
     - adcli
 
+- name: Enable backports repo for jessie
+  apt_repository:
+    repo: deb http://deb.debian.org/debian jessie-backports main
+    state: present
+  when: (ansible_os_family == "Debian" and ansible_distribution_major_version == "8")
+
 - name: Install pexpect
   package:
     name: python-pexpect
