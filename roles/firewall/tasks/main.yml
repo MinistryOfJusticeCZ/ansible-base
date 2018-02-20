@@ -8,4 +8,4 @@
     state: latest
 
 - name: Enable firewalld
-  service: name=firewalld state=stoped enabled=no
+  service: name=firewalld state=stopped enabled=no
