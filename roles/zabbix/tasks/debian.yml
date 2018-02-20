@@ -3,13 +3,21 @@
 #   with_items:
 #     - zabbix-agent
 
-# import deb repo
+
+- name: Check if zabbix-agent is installed
+  command: dpkg-query -W zabbix-agent
+  register: zabbix_agent_check
+  failed_when: zabbix_agent_check.rc > 1
+  changed_when: zabbix_agent_check.rc == 1
+
+# Install package from url
 - name: instalace repozitáře [Zabbix:3.4,Debian 8/9]
   apt:
     deb: http://repo.zabbix.com/zabbix/3.4/debian/pool/main/z/zabbix-release/zabbix-release_3.4-1+stretch_all.deb
+  when: zabbix_agent_check.rc == 1
 
-- name: Instalace zabbix agenta
-  apt:
-    name: zabbix-agent
-    state: latest
-    update_cache: yes
+# - name: Instalace zabbix agenta
+#   apt:
+#     name: zabbix-agent
+#     state: latest
+#     update_cache: yes

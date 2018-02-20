@@ -1,8 +1,10 @@
+# - name: Check if zabbix-agent is installed
+#   command: dpkg-query -W zabbix-agent
+#   register: zabbix_agent_check
+#   failed_when: zabbix_agent_check.rc > 1
+#   changed_when: zabbix_agent_check.rc == 1
+
 - name: Install debt packages from justice cloud
   apt:
     deb: "{{ item }}"
-  with_items:
-    - https://budnik.justice.cz/s/GjXex2r9oHDpl5H/download
-    - https://budnik.justice.cz/s/YrPZ0LzhuKtPiBH/download
-    - https://budnik.justice.cz/s/jZ8Na47QcYsttgD/download
-    - https://budnik.justice.cz/s/TL5z5TiYPfpXnK2/download
+  with_items: "{{ backup__package_list }}"

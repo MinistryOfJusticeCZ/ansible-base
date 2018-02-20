@@ -1,2 +1,12 @@
 ---
 base__backedup: True
+
+backup__package_list:
+  - name: gskcrypt64
+    url: https://budnik.justice.cz/s/GjXex2r9oHDpl5H/download
+  - name: gskssl64
+    url: https://budnik.justice.cz/s/YrPZ0LzhuKtPiBH/download
+  - name: tivsm-api64
+    url: https://budnik.justice.cz/s/jZ8Na47QcYsttgD/download
+  - name: tivsm-ba
+    url: https://budnik.justice.cz/s/TL5z5TiYPfpXnK2/download
