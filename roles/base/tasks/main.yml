@@ -46,7 +46,7 @@
 - name: set the server message of the day explaining ansible was the configuration management tool
   copy: src=motd
         dest=/etc/motd
-        mode=644
+        mode=0644
 
 - name: disable ssh root logins without the use of a valid ssh key
   lineinfile: dest=/etc/ssh/sshd_config state=present regexp='^PermitRootLogin ' line='PermitRootLogin no'
@@ -64,3 +64,14 @@
 #           value='true'
 #          vtype='boolean'
 #  notify: reconfigure unattended-upgrades
+
+- name: Update certificates for trust in local sshs
+  copy: src="ca-certificates/{{item}}"
+        dest="/usr/local/share/ca-certificates/{{item}}"
+        mode=0644
+  with_items:
+    - MSpRootCA.crt
+    - MSpServisCA02.crt
+
+- name: Update CA certificates
+  command: /usr/sbin/update-ca-certificates
