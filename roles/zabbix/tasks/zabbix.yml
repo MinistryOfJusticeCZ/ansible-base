@@ -37,9 +37,9 @@
         # validate: ##### Active checks related
       notify: restart zabbix-agent
 
-- name: open port 10050-10051/tcp on firewalld
-  firewalld:
-    port: 10050-10051/tcp
-    state: enabled
-    permanent: true
-  notify: restart firewalld
+# - name: open port 10050-10051/tcp on firewalld
+#   firewalld:
+#     port: 10050-10051/tcp
+#     state: enabled
+#     permanent: true
+#   notify: restart firewalld
