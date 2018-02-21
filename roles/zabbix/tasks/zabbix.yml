@@ -37,6 +37,7 @@
         # validate: ##### Active checks related
       notify: restart zabbix-agent
 
+# firewall is disabled and for the moment bindings for python2 do not work on debian for offline firewall (cuz old version)
 # - name: open port 10050-10051/tcp on firewalld
 #   firewalld:
 #     port: 10050-10051/tcp

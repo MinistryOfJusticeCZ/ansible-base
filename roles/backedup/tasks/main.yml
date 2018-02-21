@@ -1,2 +1,17 @@
 - include_tasks: debian.yml
   when: base__backedup and ansible_os_family == "Debian" and ansible_lsb.major_release >= 8
+
+- name: Copy configs
+  copy: src="{{item}}"
+        dest="/opt/tivoli/tsm/client/ba/bin/{{item}}"
+        mode=0644
+  with_items:
+    - dsm.opt
+    - dsm.sys
+
+- name: Copy startup scripts
+  file:
+    src=/opt/tivoli/tsm/client/ba/bin/rc.dsmcad
+    dest=/etc/init.d/dsmcad
+    mode=0755
+    state=link

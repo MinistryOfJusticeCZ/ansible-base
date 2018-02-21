@@ -1,0 +1,13 @@
+
+SErvername  CN.BA_L_SERVERABC01
+  NODename           CN.BA_L_SERVERABC01
+  COMMmethod         TCPip
+  TCPPort            1500
+  TCPServeraddress   tsmserver.servis.justice.cz
+  PASSWORDAccess     generate
+  managedservices    schedule webclient
+  SCHEDMode          prompted
+  Errorlogretention 14 D
+  Schedlogretention 14 D
+  SCHEDLogname       /var/log/tivoli/dsmsched.log
+  ERRORLogname       /var/log/tivoli/dsmerror.log
