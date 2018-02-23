@@ -72,6 +72,7 @@
   with_items:
     - MSpRootCA.crt
     - MSpServisCA02.crt
+    - ThawteCAG1.crt #dumb dumb *.justice.cz
 
 - name: Update CA certificates
   command: /usr/sbin/update-ca-certificates
