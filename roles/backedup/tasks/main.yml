@@ -26,4 +26,3 @@
   service:
     name: dsmcad
     enabled: yes
-    status: started
