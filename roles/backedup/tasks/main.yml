@@ -12,7 +12,7 @@
 - name: Ubuntu and debian please
   lineinfile:
     path: /opt/tivoli/tsm/client/ba/bin/rc.dsmcad
-    regexp: '   if \[ ("?)$NAME("?) = "Ubuntu"'
+    regexp: '   if \[ ("?)\$NAME("?) = "Ubuntu"'
     line: '   if [ "$NAME" = "Ubuntu" -o "$NAME" = "Debian GNU/Linux" ]'
 
 - name: Link startup scripts
