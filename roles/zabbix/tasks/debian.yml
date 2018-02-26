@@ -16,8 +16,9 @@
     deb: http://repo.zabbix.com/zabbix/3.4/debian/pool/main/z/zabbix-release/zabbix-release_3.4-1+stretch_all.deb
   when: zabbix_agent_check.rc == 1
 
-# - name: Instalace zabbix agenta
-#   apt:
-#     name: zabbix-agent
-#     state: latest
-#     update_cache: yes
+- name: Instalace zabbix agenta
+  apt:
+    name: zabbix-agent
+    state: latest
+    update_cache: yes
+  when: zabbix_agent_check.rc == 1

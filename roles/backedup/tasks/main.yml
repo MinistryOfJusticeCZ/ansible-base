@@ -9,9 +9,21 @@
     - dsm.opt
     - dsm.sys
 
-- name: Copy startup scripts
+- name: Ubuntu and debian please
+  lineinfile:
+    path: /opt/tivoli/tsm/client/ba/bin/rc.dsmcad
+    regexp: '   if [ ("?)$NAME("?) = "Ubuntu"'
+    line: '   if [ "$NAME" = "Ubuntu" -o "$NAME" = "Debian GNU/Linux" ]'
+
+- name: Link startup scripts
   file:
     src=/opt/tivoli/tsm/client/ba/bin/rc.dsmcad
     dest=/etc/init.d/dsmcad
     mode=0755
     state=link
+
+- name: Enable tivoli-agent service
+  service:
+    name: dsmcad
+    enabled: yes
+    status: started
