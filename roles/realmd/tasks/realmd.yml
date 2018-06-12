@@ -52,3 +52,8 @@
     state: present
     regexp: '^fallback_homedir'
     line: 'fallback_homedir = /home/%d/%u'
+
+- name: Enable kinit for users
+  package:
+    name: krb5-user
+    state: latest
