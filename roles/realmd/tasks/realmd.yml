@@ -28,7 +28,7 @@
     command: "realm join {{ domain | quote }} --user {{ realmd.join_user.name | quote }} --computer-ou {{ realmd.server_ou | quote }} --os-name '{{ansible_distribution}}' --os-version '{{ansible_distribution_version}}'"
     responses:
       (?i)password: '{{ realmd.join_user.password }}'
-  when: domain_connected|failed
+  when: domain_connected is failed
 
 - name: Allow sudo for sudo group
   lineinfile:
