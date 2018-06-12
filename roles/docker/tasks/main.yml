@@ -1,0 +1,6 @@
+---
+- include_tasks: debian_install.yml
+  when: docker__enabled and ansible_os_family == "Debian"
+
+- include_tasks: proxy_setup.yml
+  when: docker__enabled and http_proxy is defined

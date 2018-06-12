@@ -1,0 +1,21 @@
+- name: Add a key for docker releases
+  apt_key:
+    id: 0EBFCD88
+    url: https://download.docker.com/linux/debian/gpg
+    state: present
+
+- name: Add Docker deb server
+  apt_repository:
+    repo: "deb [arch=amd64] https://download.docker.com/linux/debian {{ansible_lsb.codename}} stable"
+    filename: docker
+
+- name: Add Docker deb-src server
+  apt_repository:
+    repo: "deb-src [arch=amd64] https://download.docker.com/linux/debian {{ansible_lsb.codename}} stable"
+    filename: docker
+  when: ansible_lsb.codename == 'wheezy'
+
+- name: Install Docker
+  apt:
+    name: docker-ce
+    update_cache: yes

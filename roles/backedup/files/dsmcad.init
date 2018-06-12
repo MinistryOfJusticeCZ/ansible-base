@@ -1,0 +1,133 @@
+#!/bin/bash
+########################################################################
+## This script is used to start/stop the dsmcad under ubuntu
+##              The original script was: start/stop mldonkey p2p client
+##              2007 by Christoph Langner, published under the GPL v3
+##              published on http://wiki.ubuntuusers.de/MLDonkey
+## Changed the script to start/stop the dsmcad for ubuntu
+## 2008 by Timo Scheller, published under the GPL v3
+## Modified, Feb. 2009 for Ubuntu Server 8.04.2
+## Modified, Feb. 2010, Fixed to change this ANS4042E: http://www-01.ibm.com/support/docview.wss?uid=swg21290640
+## No warranty, use it at your own risk!
+#######################################################################
+
+### BEGIN INIT INFO
+# Provides:          dsmcad
+# Required-Start:    $local_fs dbus
+# Required-Stop:     $local_fs dbus
+# Should-Start:      $syslog
+# Should-Stop:       $syslog
+# Default-Start:     2 3 4 5
+# Default-Stop:      S 0 1 6
+# Short-Description: TSM Client Acceptor Daemon (dsmcad)
+# Description:       Start/Stop the TSM CAD Daemon
+### END INIT INFO
+
+#PATH=/sbin:/bin:/usr/sbin:/usr/bin
+DESC="TSM Client Acceptor Daemon"
+NAME="dsmcad"
+DAEMON=/opt/tivoli/tsm/client/ba/bin/$NAME
+SCRIPTNAME="/etc/init.d/$NAME"
+#NC="/bin/nc"
+
+. /lib/lsb/init-functions
+
+DSM_CONFIG=/opt/tivoli/tsm/client/ba/bin/dsm.opt
+DSM_DIR=/opt/tivoli/tsm/client/ba/bin/
+DSM_LOG=/opt/tivoli/tsm/client/ba/bin/
+LANG=en_US.utf8
+LC_ALL=en_US.utf8
+
+export DSM_DIR DSM_CONFIG DSM_LOG LANG  LC_ALL
+# Fixed to change this ANS4042E: http://www-01.ibm.com/support/docview.wss?uid=swg21290640
+
+
+
+
+
+## Functions
+#
+# Root-Check
+#
+rootcheck() {
+if [ $UID -ne 0 ] ; then
+    echo "You must be a root user" 2>&1
+    exit 1
+fi
+}
+#
+# Get PID of daemon
+#
+pidof_dsmcad() {
+    PID=$(pidof $DAEMON)
+    if [ ! $PID ]; then
+            return 1
+    fi
+    echo $PID
+}
+#
+# Start the dsmcad daemon
+#
+d_start () {
+    rootcheck
+    if [ ! $(pidof_dsmcad) ]; then
+        $DAEMON > /dev/null 2>&1
+    fi
+}
+#
+# Stop dsmcad daemon
+#
+d_stop () {
+    rootcheck
+    pkill -f $DAEMON
+}
+#
+# Get Status of dsmcad
+#
+d_status() {
+    if [ $(pidof_dsmcad) ]; then
+        echo "$DESC is running"
+    else
+        echo "$DESC is not running"
+    fi
+}
+#
+# init-Skript
+#
+case $1 in
+    start)
+        log_daemon_msg "Starting" $DESC $DAEMON
+        d_start
+        if [ $(pidof dsmcad) ]; then
+                log_end_msg 0
+        else
+                log_end_msg 1
+        fi
+    ;;
+
+    stop)
+        log_daemon_msg "Stopping" $DESC $DAEMON
+        d_stop
+        sleep 2
+        if [ $(pidof $DAEMON) ]; then
+            log_end_msg 1
+        else
+            log_end_msg 0
+        fi
+    ;;
+
+    status)
+        d_status
+    ;;
+
+    restart)
+        $0 stop
+        sleep 1
+        $0 start
+
+    ;;
+
+    *)
+        echo "Usage: /etc/init.d/dsmcad {start|stop|restart|status}"
+    ;;
+esac
