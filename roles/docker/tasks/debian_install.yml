@@ -6,8 +6,15 @@
 
 - name: Add Docker deb server
   apt_repository:
+    repo: "deb [arch=amd64] https://download.docker.com/linux/debian stretch stable"
+    filename: docker
+  when: ansible_lsb.codename == 'sid'
+
+- name: Add Docker deb server
+  apt_repository:
     repo: "deb [arch=amd64] https://download.docker.com/linux/debian {{ansible_lsb.codename}} stable"
     filename: docker
+  when: ansible_lsb.codename != 'sid'
 
 - name: Add Docker deb-src server
   apt_repository:
