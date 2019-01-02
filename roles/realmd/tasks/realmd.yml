@@ -38,6 +38,10 @@
     validate: visudo -cf %s
   when: realmd.sudo_group is defined
 
+#- name: Restrict login privileges to sudo group only (primary sudo group)
+#  command: realm permit -g {{ realmd.sudo_group }}
+#  when: realmd.sudo_group is defined  
+
 - name: Add pam_mkhomedir for Debian machines
   copy:
     src: pam_mkhomedir
