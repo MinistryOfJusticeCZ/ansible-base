@@ -46,7 +46,7 @@
   lineinfile:
     dest: /etc/sudoers
     state: present
-    line: '%{{ realmd.sudo_group_extra}}@{{ domain | quote }}  ALL=(root:ALL) ALL, !/bin/su'
+    line: '%{{ realmd.sudo_group_extra}}@{{ domain | quote }}  ALL=(root:ALL) ALL, !/bin/su , !/bin/passwd'
     validate: visudo -cf %s
   when: realmd.sudo_group_extra is defined
 
