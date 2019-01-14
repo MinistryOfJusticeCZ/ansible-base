@@ -84,7 +84,7 @@ when: ansible_facts['distribution'] == 'Debian'
 #          vtype='boolean'
 #  notify: reconfigure unattended-upgrades
 
-- block 
+- block: 
   - name: Update certificates for trust in local sshs
   copy: src="ca-certificates/{{item}}"
         dest="/usr/local/share/ca-certificates/{{item}}"
@@ -98,7 +98,7 @@ when: ansible_facts['distribution'] == 'Debian'
   command: /usr/sbin/update-ca-certificates
 when: ansible_facts['distribution'] == 'Debian'
 
-- block 
+- block: 
   - name: Update certificates for trust in local sshs (Redhat)
   copy: src="ca-certificates/{{item}}"
         dest="/etc/pki/ca-trust/source/anchors/{{item}}"
