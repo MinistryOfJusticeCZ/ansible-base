@@ -84,3 +84,17 @@ when: ansible_facts['distribution'] == 'Debian'
   - name: Update CA certificates
   command: /usr/sbin/update-ca-certificates
 when: ansible_facts['distribution'] == 'Debian'
+
+- block 
+  - name: Update certificates for trust in local sshs (Redhat)
+  copy: src="ca-certificates/{{item}}"
+        dest="/etc/pki/ca-trust/source/anchors/{{item}}"
+        mode=0644
+  with_items:
+    - MSpRootCA.crt
+    - MSpServisCA02.crt
+    - ThawteCAG1.crt #dumb dumb *.justice.cz
+
+  - name: Update CA certificates (RedHat)
+  command: /usr/bin/update-ca-trust extract
+when: ansible_facts['distribution'] == 'CentOS' or ansible_facts['distribution'] == 'OracleLinux'
