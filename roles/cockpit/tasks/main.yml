@@ -11,10 +11,7 @@ block:
     repo: deb http://deb.debian.org/debian stretch-backports main
     state: present
   when: ansible_distribution_major_version == "9"
-
-  - name: install cockpit
-  apt:
-    name: cockpit
-    state: present
-    update_cache: yes
 when: ansible_os_family == "Debian"
+
+- name: install cockpit
+    package: name=cockpit state=present update_cache=yes
