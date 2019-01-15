@@ -108,10 +108,10 @@
 
 - block: 
   - name: Update certificates for trust in local sshs (Redhat)
-      copy: src="ca-certificates/{{item}}"
-            dest="/etc/pki/ca-trust/source/anchors/{{item}}"
-            mode=0644
-      with_items:
+    copy: src="ca-certificates/{{item}}"
+          dest="/etc/pki/ca-trust/source/anchors/{{item}}"
+          mode=0644
+    with_items:
         - MSpRootCA.crt
         - MSpServisCA02.crt
         - ThawteCAG1.crt #dumb dumb *.justice.cz
