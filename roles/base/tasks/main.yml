@@ -33,13 +33,13 @@
   with_items:
     - apt-transport-https
     - unattended-upgrades
-when: ansible_facts['distribution'] == 'Debian'
+ when: ansible_facts['distribution'] == 'Debian'
 
- - name: Set yum http proxy
+- name: Set yum http proxy
   lineinfile:
-    dest: /etc/yum.conf
-    line: 'proxy={{ http_proxy }}'
-  when: http_proxy is defined AND (ansible_facts['distribution'] == 'CentOS' or ansible_facts['distribution'] == 'OracleLinux') 
+   dest: /etc/yum.conf
+   line: 'proxy={{ http_proxy }}'
+ when: http_proxy is defined AND (ansible_facts['distribution'] == 'CentOS' or ansible_facts['distribution'] == 'OracleLinux') 
 
 - name: Install some commonly used packages
   package: name={{ item }} state=present
@@ -86,28 +86,27 @@ when: ansible_facts['distribution'] == 'Debian'
 
 - block: 
   - name: Update certificates for trust in local sshs
-  copy: src="ca-certificates/{{item}}"
+    copy: src="ca-certificates/{{item}}"
         dest="/usr/local/share/ca-certificates/{{item}}"
         mode=0644
-  with_items:
-    - MSpRootCA.crt
-    - MSpServisCA02.crt
-    - ThawteCAG1.crt #dumb dumb *.justice.cz
-
+    with_items:
+      - MSpRootCA.crt
+      - MSpServisCA02.crt
+      - ThawteCAG1.crt #dumb dumb *.justice.cz
   - name: Update CA certificates
-  command: /usr/sbin/update-ca-certificates
-when: ansible_facts['distribution'] == 'Debian'
+      command: /usr/sbin/update-ca-certificates
+ when: ansible_facts['distribution'] == 'Debian'
 
 - block: 
   - name: Update certificates for trust in local sshs (Redhat)
-  copy: src="ca-certificates/{{item}}"
-        dest="/etc/pki/ca-trust/source/anchors/{{item}}"
-        mode=0644
-  with_items:
-    - MSpRootCA.crt
-    - MSpServisCA02.crt
-    - ThawteCAG1.crt #dumb dumb *.justice.cz
+      copy: src="ca-certificates/{{item}}"
+            dest="/etc/pki/ca-trust/source/anchors/{{item}}"
+            mode=0644
+      with_items:
+        - MSpRootCA.crt
+        - MSpServisCA02.crt
+        - ThawteCAG1.crt #dumb dumb *.justice.cz
 
   - name: Update CA certificates (RedHat)
-  command: /usr/bin/update-ca-trust extract
-when: ansible_facts['distribution'] == 'CentOS' or ansible_facts['distribution'] == 'OracleLinux'
+     command: /usr/bin/update-ca-trust extract
+ when: ansible_facts['distribution'] == 'CentOS' or ansible_facts['distribution'] == 'OracleLinux'
