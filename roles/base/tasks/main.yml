@@ -56,6 +56,15 @@
     - bash-completion
     - bash-completion-extras
   when: ansible_facts['distribution'] == 'CentOS' or ansible_facts['distribution'] == 'OracleLinux'
+  
+- block:
+  - name: Install unattended update manager (YUM-CRON)
+    package: name={{ item }} state=present
+    with_items:
+      - yum-cron
+#  - name: configure yum-cron to autoinstall security updates only
+#  - name: check if service is enabled
+  when: ansible_facts['distribution'] == 'CentOS' or ansible_facts['distribution'] == 'OracleLinux'
 
 - name: Install management and observation agents
   package: name={{ item }} state=present
