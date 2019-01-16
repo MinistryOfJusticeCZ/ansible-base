@@ -30,25 +30,25 @@
       (?i)password: '{{ realmd.join_user.password }}'
   when: domain_connected is failed
 
-block:
-  block:
-    - name: Allow sudo for sudo group
-      lineinfile:
-        dest: /etc/sudoers
-        state: present
-        line: '%{{ realmd.sudo_group }}@{{ domain | quote }}  ALL=(root:ALL) ALL, !/bin/su'
-        validate: visudo -cf %s
-      when: realmd.sudo_group is defined
+- name: Allow sudo for sudo group
+  lineinfile:
+    dest: /etc/sudoers
+    state: present
+    line: '%{{ realmd.sudo_group }}@{{ domain | quote }}  ALL=(root:ALL) ALL, !/bin/su'
+    validate: visudo -cf %s
+  when: realmd.sudo_group is defined
 
-    - name: Allow sudo for additional sudo group (external contractors)
-      lineinfile:
-        dest: /etc/sudoers
-        state: present
-        line: '%{{ realmd.sudo_group_extra}}@{{ domain | quote }}  ALL=(root:ALL) ALL, !/bin/su , !/bin/passwd'
-        validate: visudo -cf %s
-      when: realmd.sudo_group_extra is defined
-   when:ansible_facts['distribution'] == 'Debian'
-when: (realmd.sudo_group is defined OR realmd.sudo_group_extra is defined)
+#- name: Restrict login privileges to sudo group only (primary sudo group)
+#  command: realm permit -g {{ realmd.sudo_group }}
+#  when: realmd.sudo_group is defined
+
+- name: Allow sudo for additional sudo group (external contractors)
+  lineinfile:
+    dest: /etc/sudoers
+    state: present
+    line: '%{{ realmd.sudo_group_extra}}@{{ domain | quote }}  ALL=(root:ALL) ALL, !/bin/su , !/bin/passwd'
+    validate: visudo -cf %s
+  when: realmd.sudo_group_extra is defined
 
 #- name: Restrict login privileges to sudo group only (additional sudo group)
 #  command: realm permit -g {{ realmd.sudo_group_extra }}
