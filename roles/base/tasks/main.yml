@@ -1,38 +1,38 @@
 ---
 - block:
- - name: Remove apt config - http proxy
-  file:
-    dest: /etc/apt/apt.conf
-    state: absent
+    - name: Remove apt config - http proxy
+      file:
+      dest: /etc/apt/apt.conf
+      state: absent
 
- - name: Remove proxy from 70debconf
-  lineinfile:
-    dest: /etc/apt/apt.conf.d/70debconf
-    state: absent
-    regexp: '^\s*Acquire::http::Proxy'
-  when: http_proxy is defined
+     - name: Remove proxy from 70debconf
+      lineinfile:
+        dest: /etc/apt/apt.conf.d/70debconf
+        state: absent
+        regexp: '^\s*Acquire::http::Proxy'
+      when: http_proxy is defined
 
- - name: Set apt http proxy
-  lineinfile:
-    dest: /etc/apt/apt.conf.d/70debconf
-    line: 'Acquire::http::Proxy "{{ http_proxy }}";'
-    create: yes
-    owner: root
-    group: root
-    mode: 644
-  when: http_proxy is defined
+     - name: Set apt http proxy
+      lineinfile:
+        dest: /etc/apt/apt.conf.d/70debconf
+        line: 'Acquire::http::Proxy "{{ http_proxy }}";'
+        create: yes
+        owner: root
+        group: root
+        mode: 644
+      when: http_proxy is defined
 
- - name: Set apt https proxy
-  lineinfile:
-    dest: /etc/apt/apt.conf.d/70debconf
-    line: 'Acquire::https::Proxy "{{ http_proxy }}";'
-  when: http_proxy is defined
+     - name: Set apt https proxy
+      lineinfile:
+        dest: /etc/apt/apt.conf.d/70debconf
+        line: 'Acquire::https::Proxy "{{ http_proxy }}";'
+      when: http_proxy is defined
 
- - name: Install some commonly used packages
-  package: name={{ item }} state=present
-  with_items:
-    - apt-transport-https
-    - unattended-upgrades
+     - name: Install some commonly used packages
+      package: name={{ item }} state=present
+      with_items:
+        - apt-transport-https
+        - unattended-upgrades
  when: ansible_facts['distribution'] == 'Debian'
 
 - name: Set yum http proxy
@@ -58,12 +58,12 @@
   when: ansible_facts['distribution'] == 'CentOS' or ansible_facts['distribution'] == 'OracleLinux'
   
 - block:
-  - name: Install unattended update manager (YUM-CRON)
-    package: name={{ item }} state=present
-    with_items:
-      - yum-cron
-#  - name: configure yum-cron to autoinstall security updates only
-#  - name: check if service is enabled
+    - name: Install unattended update manager (YUM-CRON)
+      package: name={{ item }} state=present
+      with_items:
+        - yum-cron
+  #  - name: configure yum-cron to autoinstall security updates only
+  #  - name: check if service is enabled
   when: ansible_facts['distribution'] == 'CentOS' or ansible_facts['distribution'] == 'OracleLinux'
 
 - name: Install management and observation agents
@@ -94,28 +94,28 @@
 #  notify: reconfigure unattended-upgrades
 
 - block: 
-  - name: Update certificates for trust in local sshs
-    copy: src="ca-certificates/{{item}}"
-        dest="/usr/local/share/ca-certificates/{{item}}"
-        mode=0644
-    with_items:
-      - MSpRootCA.crt
-      - MSpServisCA02.crt
-      - ThawteCAG1.crt #dumb dumb *.justice.cz
-  - name: Update CA certificates
-      command: /usr/sbin/update-ca-certificates
- when: ansible_facts['distribution'] == 'Debian'
-
-- block: 
-  - name: Update certificates for trust in local sshs (Redhat)
-    copy: src="ca-certificates/{{item}}"
-          dest="/etc/pki/ca-trust/source/anchors/{{item}}"
+    - name: Update certificates for trust in local sshs
+      copy: src="ca-certificates/{{item}}"
+          dest="/usr/local/share/ca-certificates/{{item}}"
           mode=0644
-    with_items:
+      with_items:
         - MSpRootCA.crt
         - MSpServisCA02.crt
         - ThawteCAG1.crt #dumb dumb *.justice.cz
+    - name: Update CA certificates
+        command: /usr/sbin/update-ca-certificates
+ when: ansible_facts['distribution'] == 'Debian'
 
-  - name: Update CA certificates (RedHat)
-     command: /usr/bin/update-ca-trust extract
+- block: 
+    - name: Update certificates for trust in local sshs (Redhat)
+      copy: src="ca-certificates/{{item}}"
+            dest="/etc/pki/ca-trust/source/anchors/{{item}}"
+            mode=0644
+      with_items:
+          - MSpRootCA.crt
+          - MSpServisCA02.crt
+          - ThawteCAG1.crt #dumb dumb *.justice.cz
+
+    - name: Update CA certificates (RedHat)
+       command: /usr/bin/update-ca-trust extract
  when: ansible_facts['distribution'] == 'CentOS' or ansible_facts['distribution'] == 'OracleLinux'
