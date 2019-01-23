@@ -49,8 +49,6 @@
     - htop
     - tmux
     - vim
-    - apt-transport-https
-    - unattended-upgrades
 
 - name: Install management and observation agents
   package: name={{ item }} state=present
