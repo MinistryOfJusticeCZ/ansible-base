@@ -50,6 +50,13 @@
     - tmux
     - vim
 
+- name: Install packages neccessary form bash autocompletion (Redhat)
+  package: name={{ item }} state=present
+  with_items:
+    - bash-completion
+    - bash-completion-extras
+  when: (ansible_facts['distribution'] == 'CentOS' OR ansible_facts['distribution'] == 'OracleLinux')
+
 - name: Install management and observation agents
   package: name={{ item }} state=present
   with_items:
