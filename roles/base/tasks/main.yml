@@ -35,6 +35,12 @@
     - unattended-upgrades
   when: ansible_facts['distribution'] == 'Debian'
 
+- name: Set yum https proxy
+  lineinfile:
+    dest: /etc/yum.conf
+    line: 'proxy="{{ http_proxy }}";'
+  when: (http_proxy is defined AND (ansible_facts['distribution'] == 'CentOS' or ansible_facts['distribution'] == 'OracleLinux'))
+
 - name: Install other commonly used packages
   package: name={{ item }} state=present
   with_items:
