@@ -24,7 +24,7 @@
         dest: /etc/apt/apt.conf.d/70debconf
         line: 'Acquire::https::Proxy "{{ http_proxy }}";'
       when: http_proxy is defined
-  when: ansible_facts['distribution'] == 'Debian'
+ when: ansible_facts['distribution'] == 'Debian'
 
 - name: APT install common packages
 - package: name={{ item }} state=present
@@ -37,7 +37,7 @@
   lineinfile:
    dest: /etc/yum.conf
    line: 'proxy={{ http_proxy }}'
-  when: http_proxy is defined AND (ansible_facts['distribution'] == 'CentOS' or ansible_facts['distribution'] == 'OracleLinux')
+ when: http_proxy is defined AND (ansible_facts['distribution'] == 'CentOS' or ansible_facts['distribution'] == 'OracleLinux') 
 
 - name: Install some commonly used packages
   package: name={{ item }} state=present
@@ -92,7 +92,7 @@
 #  notify: reconfigure unattended-upgrades
 
 - name: Update certificates for trust in local sshs (Debian)
-- block:
+- block: 
     - copy: src="ca-certificates/{{item}}"
           dest="/usr/local/share/ca-certificates/{{item}}"
           mode=0644
@@ -101,10 +101,10 @@
         - MSpServisCA02.crt
         - ThawteCAG1.crt #dumb dumb *.justice.cz
     - command: /usr/sbin/update-ca-certificates
-  when: ansible_facts['distribution'] == 'Debian'
+ when: ansible_facts['distribution'] == 'Debian'
 
 - name: Update certificates for trust in local sshs (Redhat)
-- block:
+- block: 
     - copy: src="ca-certificates/{{item}}"
             dest="/etc/pki/ca-trust/source/anchors/{{item}}"
             mode=0644
@@ -114,4 +114,4 @@
           - ThawteCAG1.crt #dumb dumb *.justice.cz
 
     - command: /usr/bin/update-ca-trust extract
-  when: ansible_facts['distribution'] == 'CentOS' or ansible_facts['distribution'] == 'OracleLinux'
+ when: ansible_facts['distribution'] == 'CentOS' or ansible_facts['distribution'] == 'OracleLinux'
