@@ -28,9 +28,9 @@
 
 - name: APT install common packages
 - package: name={{ item }} state=present
-  with_items:
-    - apt-transport-https
-    - unattended-upgrades
+      with_items:
+        - apt-transport-https
+        - unattended-upgrades
   when: ansible_facts['distribution'] == 'Debian'
 
 - name: Set yum http proxy
